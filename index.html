@@ -2,251 +2,310 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>PC Build Recommender</title>
   <style>
-    /* Page background + layout */
+    :root {
+      --bg: #0b0b0d;
+      --text: #e8e8ea;
+      --muted: #a8acb3;
+      --card: #16171a;
+      --card-2: #1d1f24;
+      --accent: #7aa2ff;
+      --border: #272a31;
+      --success: #1db954;
+      --warn: #ffcc00;
+      --error: #ff5c5c;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
     body {
-      background-color: #0f0f10;
-      color: #ffffff;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      min-height: 100vh;
-      padding-top: 4rem;
-      text-align: center;
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      display: grid;
+      place-items: center;
+      padding: 24px;
     }
 
-    /* Wrapper so it doesn't get super wide on big monitors */
-    .container {
-      max-width: 480px;
+    .wrap {
       width: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
+      max-width: 820px;
+      display: grid;
+      gap: 18px;
     }
 
-    /* Top heading section */
-    .header-block h1 {
-      font-size: 1.4rem;
-      font-weight: 600;
-      color: #fff;
-      margin-bottom: 0.5rem;
-      display: flex;
-      flex-direction: column;
-      line-height: 1.3rem;
+    .title {
+      text-align: center;
+      line-height: 1.2;
+    }
+    .title h1 {
+      margin: 0 0 8px 0;
+      font-size: clamp(24px, 3vw, 34px);
+      font-weight: 700;
+      letter-spacing: .2px;
+    }
+    .title p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
     }
 
-    .header-block h1 .tagline {
-      font-size: 0.8rem;
-      font-weight: 500;
-      color: #9ca3af; /* gray */
-      margin-top: 0.6rem;
-      line-height: 1.2rem;
-    }
-
-    /* Card box under heading */
     .card {
-      background-color: #1a1a1d;
-      border: 1px solid #2a2a2f;
-      border-radius: 16px;
-      width: 100%;
-      padding: 1.5rem 1.5rem 1.25rem;
-      box-shadow: 0 24px 64px rgba(0,0,0,0.8);
+      background: linear-gradient(180deg, var(--card), var(--card-2));
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: 0 15px 50px rgba(0,0,0,.35);
+      padding: 20px;
     }
 
-    /* "beta" pill */
-    .badge {
-      display: inline-block;
-      background: linear-gradient(90deg,#3b82f6,#8b5cf6);
-      color: white;
-      font-size: 0.7rem;
-      font-weight: 600;
-      padding: 0.4rem 0.6rem;
-      border-radius: 999px;
-      margin-bottom: 1rem;
+    .grid {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: 1fr;
     }
-
-    .card h2 {
-      font-size: 1rem;
-      font-weight: 600;
-      color: #fff;
-      margin: 0 0 0.75rem 0;
-      line-height: 1.4rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-    }
-
-    /* Instruction text */
-    .card p {
-      font-size: 0.9rem;
-      line-height: 1.4rem;
-      color: #d1d5db;
-      margin: 0 0 1rem 0;
-    }
-
-    /* Hint footer inside card */
-    .hint {
-      font-size: 0.8rem;
-      color: #9ca3af;
-      margin-top: 0.75rem;
-    }
-
-    .hint span {
-      color: #facc15; /* yellow for icon text */
-    }
-
-    /* Footer note under card */
-    .footer-note {
-      font-size: 0.7rem;
-      color: #555;
-      text-align: center;
-      line-height: 1rem;
-    }
-
-  </style>
-</head>
-
-<body>
-  <div class="container">
-
-    <!-- Top headline / hero -->
-    <div class="header-block">
-      <h1>
-        <span>PC Build Recommender</span>
-        <span class="tagline">Describe the PC you want. Get a full build with price + FPS.</span>
-      </h1>
-    </div>
-
-    <!-- Main card -->
-    <div class="card">
-      <div class="badge">beta</div>
-
-      <h2>
-        🖥️ Tell me what you need:
-        <span style="font-weight:500; color:#9ca3af; font-size:0.8rem;">
-          Examples you can ask me:
-        </span>
-      </h2>
-
-      <p>
-        • “I have $1500 for Cyberpunk 2077 at 1440p High. Build me a PC.”<br/><br/>
-        • “Give me the cheapest build for Valorant 240 FPS at 1080p.”<br/><br/>
-        • “Make me a 4K Ultra Starfield rig under $2500.”
-      </p>
-
-      <div class="hint">
-        <span>💡</span> Click the chat bubble in the bottom right to start.
-      </div>
-    </div>
-
-    <div class="footer-note">
-      The assistant will browse live part prices, recommend CPU / GPU / RAM, and estimate FPS.
-    </div>
-
-  </div>
-
-  <!-- Custom PC Builder input and response box -->
-  <div style="
-    background-color:#1a1a1d;
-    border:1px solid #2a2a2f;
-    border-radius:16px;
-    max-width:480px;
-    width:100%;
-    margin:2rem auto 0;
-    padding:1rem 1rem 1.5rem;
-    box-shadow:0 24px 64px rgba(0,0,0,0.8);
-    text-align:left;
-    color:#fff;
-    ">
-    
-    <div style="font-size:0.8rem; color:#9ca3af; margin-bottom:0.5rem;">
-      Ask for a build:
-    </div>
-
-    <textarea
-      id="userInput"
-      style="
-        width:100%;
-        background-color:#0f0f10;
-        color:#fff;
-        border:1px solid #2a2a2f;
-        border-radius:8px;
-        padding:0.75rem;
-        font-size:0.9rem;
-        line-height:1.3rem;
-        resize:none;
-        height:70px;
-        "
-      placeholder="Example: I have $1500 for Cyberpunk 2077 at 1440p High. Build me a PC with FPS and total price.">
-    </textarea>
-
-    <button
-      id="sendBtn"
-      style="
-        margin-top:0.75rem;
-        width:100%;
-        background:linear-gradient(90deg,#3b82f6,#8b5cf6);
-        border:none;
-        border-radius:8px;
-        color:#fff;
-        font-weight:600;
-        font-size:0.9rem;
-        padding:0.75rem;
-        cursor:pointer;
-      "
-    >
-      Get My Build
-    </button>
-
-    <div id="answerBox"
-      style="
-        margin-top:1rem;
-        background-color:#0f0f10;
-        border:1px solid #2a2a2f;
-        border-radius:8px;
-        padding:0.75rem;
-        font-size:0.8rem;
-        line-height:1.3rem;
-        color:#d1d5db;
-        white-space:pre-wrap;
-        min-height:4rem;
-      "
-    >Your build answer will show up here...</div>
-  </div>
-
-  <script>
-    async function askForBuild() {
-      const msg = document.getElementById('userInput').value.trim();
-      if (!msg) return;
-
-      // show loading state
-      const answerBox = document.getElementById('answerBox');
-      answerBox.textContent = "Working on it... (fetching game requirements, prices, FPS)";
-
-      try {
-const res = await fetch("https://pc-builder-site.onrender.com/ask", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ message: msg })
-});
-
-
-        const data = await res.json();
-        if (data.answer) {
-          answerBox.textContent = data.answer;
-        } else if (data.error) {
-          answerBox.textContent = "Error: " + data.error;
-        } else {
-          answerBox.textContent = "Unexpected response.";
-        }
-      } catch (err) {
-        answerBox.textContent = "Request failed. Is the server.py (uvicorn) running?";
+    @media (min-width: 720px) {
+      .grid {
+        grid-template-columns: repeat(2, 1fr);
       }
     }
 
-    document.getElementById('sendBtn').addEventListener('click', askForBuild);
+    label {
+      display: block;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    select, input[type="text"] {
+      width: 100%;
+      background: #0f1115;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      outline: none;
+      font-size: 14px;
+    }
+    select:focus, input[type="text"]:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(122,162,255,.15);
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      margin-top: 8px;
+    }
+    button {
+      appearance: none;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 14px;
+      background: #111318;
+      color: var(--text);
+      font-weight: 600;
+      cursor: pointer;
+    }
+    button.primary {
+      background: var(--accent);
+      color: #0a0b0e;
+      border-color: transparent;
+    }
+    button:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+    }
+
+    .hint {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .result {
+      background: #0e1014;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      min-height: 120px;
+      white-space: pre-wrap;
+      line-height: 1.4;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 12px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: #21232a;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      margin-left: 8px;
+    }
+
+    .row {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 720px) {
+      .row {
+        grid-template-columns: 2fr 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="title">
+      <h1>PC Build Recommender <span class="badge">beta</span></h1>
+      <p>Pick your game, quality, and budget — I’ll return a full parts list, est. FPS, and total price.</p>
+    </div>
+
+    <div class="card">
+      <div class="grid">
+        <div>
+          <label for="game">Game</label>
+          <select id="game">
+            <option>Cyberpunk 2077</option>
+            <option>Valorant</option>
+            <option>CS2</option>
+            <option>Overwatch 2</option>
+            <option>Apex Legends</option>
+            <option>Fortnite</option>
+            <option>Rocket League</option>
+            <option>Skate</option>
+            <option>Minecraft</option>
+            <option>Roblox</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="setting">Setting / Target</label>
+          <select id="setting">
+            <option>1080p Low</option>
+            <option>1080p Medium</option>
+            <option>1080p High</option>
+            <option>1440p High</option>
+            <option>1440p Ultra</option>
+            <option>4K High</option>
+            <option>4K Ultra</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="budget">Budget (parts total)</label>
+          <select id="budget">
+            <option>$500–$1,000</option>
+            <option>$1,000–$1,500</option>
+            <option>$1,500–$2,000</option>
+            <option>$2,000–$3,000</option>
+            <option>$3,000+</option>
+          </select>
+          <div class="hint">Rules: 500–1000 = Low, 1000–2000 = Medium, 1800–3000 = High, 3300+ = 4K.</div>
+        </div>
+
+        <div>
+          <label for="extras">Optional details</label>
+          <input id="extras" type="text" placeholder="e.g., prefer Nvidia, white case, 2TB SSD" />
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="clearBtn">Clear</button>
+        <button id="goBtn" class="primary">Generate Build</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="row">
+        <div>
+          <label>Result</label>
+          <div id="result" class="result">Your build will appear here.</div>
+        </div>
+        <div>
+          <label>Status</label>
+          <div id="status" class="result" style="min-height: 60px;">Idle</div>
+        </div>
+      </div>
+    </div>
+
+    <p class="hint">Tip: You can also ask freeform — “I have $1500 for Cyberpunk at 1440p High. Give me CPU/GPU/RAM/PSU/Case, est FPS, and total price.”</p>
+  </div>
+
+  <script>
+    // ⛳️ Replace with your actual Render API base URL (no trailing slash)
+    const API_BASE = "https://pc-builder-site.onrender.com";
+
+    const gameEl = document.getElementById('game');
+    const settingEl = document.getElementById('setting');
+    const budgetEl = document.getElementById('budget');
+    const extrasEl = document.getElementById('extras');
+    const goBtn = document.getElementById('goBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const outEl = document.getElementById('result');
+    const statusEl = document.getElementById('status');
+
+    function makePrompt() {
+      const game = gameEl.value;
+      const setting = settingEl.value;
+      const budget = budgetEl.value;
+      const extras = (extrasEl.value || '').trim();
+
+      return `Build me a gaming PC for ${game} at ${setting}.
+Budget: ${budget}.
+Classify budget rules: 500–1000 = Low, 1000–2000 = Medium, 1800–3000 = High, 3300+ = 4K.
+Return a neat list with: CPU, GPU, RAM (GB), Storage, PSU, Case, Est FPS for that game/setting, and Total price in USD.
+${extras ? "Preferences: " + extras : ""}`;
+    }
+
+    async function askBackend(message) {
+      const url = API_BASE + "/ask";
+      const resp = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message })
+      });
+
+      if (!resp.ok) {
+        const fallback = await resp.text().catch(() => "");
+        throw new Error(`Request failed (${resp.status}). ${fallback}`);
+      }
+      const data = await resp.json();
+      return (data && (data.answer || data.result || JSON.stringify(data)));
+    }
+
+    async function onGenerate() {
+      const prompt = makePrompt();
+      outEl.textContent = "";
+      statusEl.textContent = "Working…";
+      goBtn.disabled = true;
+
+      try {
+        const answer = await askBackend(prompt);
+        outEl.textContent = answer;
+        statusEl.textContent = "Done";
+      } catch (err) {
+        outEl.textContent = "";
+        statusEl.textContent = "Error";
+        alert(err.message);
+      } finally {
+        goBtn.disabled = false;
+      }
+    }
+
+    function onClear() {
+      extrasEl.value = "";
+      outEl.textContent = "Your build will appear here.";
+      statusEl.textContent = "Idle";
+    }
+
+    goBtn.addEventListener('click', onGenerate);
+    clearBtn.addEventListener('click', onClear);
   </script>
 </body>
 </html>
