@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>PC Build Recommender</title>
+    <style>
+      body {
+        background-color: #0f0f10;
+        color: #ffffff;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        flex-direction: column;
+        text-align: center;
+        padding: 2rem;
+      }
+
+      .card {
+        background-color: #1a1a1d;
+        border: 1px solid #2a2a2f;
+        border-radius: 16px;
+        max-width: 420px;
+        width: 100%;
+        padding: 1.5rem 2rem;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+      }
+
+      h1 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: #fff;
+      }
+
+      p {
+        font-size: 0.9rem;
+        line-height: 1.4rem;
+        color: #cfcfd4;
+        margin: 0.3rem 0 1rem 0;
+      }
+
+      .hint {
+        font-size: 0.8rem;
+        color: #5f5f6a;
+        margin-top: 1rem;
+      }
+
+      .badge {
+        display: inline-block;
+        background: linear-gradient(90deg,#3b82f6,#8b5cf6);
+        color: white;
+        font-size: 0.7rem;
+        font-weight: 600;
+        padding: 0.4rem 0.6rem;
+        border-radius: 999px;
+        margin-bottom: 0.75rem;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="card">
+      <div class="badge">beta</div>
+      <h1>PC Build Recommender</h1>
+      <p>Ask the bot in the corner: “I have $1500 for Cyberpunk 2077 at 1440p High, build me a PC.”</p>
+      <p>It will browse part prices and tell you the best CPU / GPU / RAM for that budget.</p>
+      <div class="hint">Look for the chat bubble in the bottom right.</div>
+    </div>
+
+    <!-- ChatKit embed -->
+    <script src="https://chat.openai.com/static/chatkit/chatkit.js"></script>
+    <script>
+      window.ChatKit.init({
+        workflowId: "WFID_PLACEHOLDER",   // <--- replace this
+        version: "1",                     // <--- replace this with the version string you saw
+        theme: "dark",
+        title: "PC Build AI",
+        subtitle: "Get the best gaming rig for your budget.",
+        description: "I’ll find recommended specs for your game and price out a full build with estimated FPS.",
+        position: "bottom-right"
+      });
+    </script>
+  </body>
+</html<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>PC Build Recommender</title>
+    <style>
+      body {
+        background-color: #0f0f10;
+        color: #ffffff;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        flex-direction: column;
+        text-align: center;
+        padding: 2rem;
+      }
+
+      .card {
+        background-color: #1a1a1d;
+        border: 1px solid #2a2a2f;
+        border-radius: 16px;
+        max-width: 420px;
+        width: 100%;
+        padding: 1.5rem 2rem;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+      }
+
+      h1 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: #fff;
+      }
+
+      p {
+        font-size: 0.9rem;
+        line-height: 1.4rem;
+        color: #cfcfd4;
+        margin: 0.3rem 0 1rem 0;
+      }
+
+      .hint {
+        font-size: 0.8rem;
+        color: #5f5f6a;
+        margin-top: 1rem;
+      }
+
+      .badge {
+        display: inline-block;
+        background: linear-gradient(90deg,#3b82f6,#8b5cf6);
+        color: white;
+        font-size: 0.7rem;
+        font-weight: 600;
+        padding: 0.4rem 0.6rem;
+        border-radius: 999px;
+        margin-bottom: 0.75rem;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="card">
+      <div class="badge">beta</div>
+      <h1>PC Build Recommender</h1>
+      <p>Ask the bot in the corner: “I have $1500 for Cyberpunk 2077 at 1440p High, build me a PC.”</p>
+      <p>It will browse part prices and tell you the best CPU / GPU / RAM for that budget.</p>
+      <div class="hint">Look for the chat bubble in the bottom right.</div>
+    </div>
+
+    <!-- ChatKit embed -->
+    <script src="https://chat.openai.com/static/chatkit/chatkit.js"></script>
+    <script>
+      window.ChatKit.init({
+        workflowId: "wf_6907ebbe25048190a1ed5998dd1c124d022168ad7020304b",   // <--- replace this
+        version: "1",                     // <--- replace this with the version string you saw
+        theme: "dark",
+        title: "PC Build AI",
+        subtitle: "Get the best gaming rig for your budget.",
+        description: "I’ll find recommended specs for your game and price out a full build with estimated FPS.",
+        position: "bottom-right"
+      });
+    </script>
+  </body>
+</html

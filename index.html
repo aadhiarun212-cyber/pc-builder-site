@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>PC Build Recommender</title>
+  <style>
+    /* Page background + layout */
+    body {
+      background-color: #0f0f10;
+      color: #ffffff;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      padding-top: 4rem;
+      text-align: center;
+    }
+
+    /* Wrapper so it doesn't get super wide on big monitors */
+    .container {
+      max-width: 480px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    /* Top heading section */
+    .header-block h1 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 0.5rem;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.3rem;
+    }
+
+    .header-block h1 .tagline {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #9ca3af; /* gray */
+      margin-top: 0.6rem;
+      line-height: 1.2rem;
+    }
+
+    /* Card box under heading */
+    .card {
+      background-color: #1a1a1d;
+      border: 1px solid #2a2a2f;
+      border-radius: 16px;
+      width: 100%;
+      padding: 1.5rem 1.5rem 1.25rem;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.8);
+    }
+
+    /* "beta" pill */
+    .badge {
+      display: inline-block;
+      background: linear-gradient(90deg,#3b82f6,#8b5cf6);
+      color: white;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.4rem 0.6rem;
+      border-radius: 999px;
+      margin-bottom: 1rem;
+    }
+
+    .card h2 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #fff;
+      margin: 0 0 0.75rem 0;
+      line-height: 1.4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    /* Instruction text */
+    .card p {
+      font-size: 0.9rem;
+      line-height: 1.4rem;
+      color: #d1d5db;
+      margin: 0 0 1rem 0;
+    }
+
+    /* Hint footer inside card */
+    .hint {
+      font-size: 0.8rem;
+      color: #9ca3af;
+      margin-top: 0.75rem;
+    }
+
+    .hint span {
+      color: #facc15; /* yellow for icon text */
+    }
+
+    /* Footer note under card */
+    .footer-note {
+      font-size: 0.7rem;
+      color: #555;
+      text-align: center;
+      line-height: 1rem;
+    }
+
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <!-- Top headline / hero -->
+    <div class="header-block">
+      <h1>
+        <span>PC Build Recommender</span>
+        <span class="tagline">Describe the PC you want. Get a full build with price + FPS.</span>
+      </h1>
+    </div>
+
+    <!-- Main card -->
+    <div class="card">
+      <div class="badge">beta</div>
+
+      <h2>
+        🖥️ Tell me what you need:
+        <span style="font-weight:500; color:#9ca3af; font-size:0.8rem;">
+          Examples you can ask me:
+        </span>
+      </h2>
+
+      <p>
+        • “I have $1500 for Cyberpunk 2077 at 1440p High. Build me a PC.”<br/><br/>
+        • “Give me the cheapest build for Valorant 240 FPS at 1080p.”<br/><br/>
+        • “Make me a 4K Ultra Starfield rig under $2500.”
+      </p>
+
+      <div class="hint">
+        <span>💡</span> Click the chat bubble in the bottom right to start.
+      </div>
+    </div>
+
+    <div class="footer-note">
+      The assistant will browse live part prices, recommend CPU / GPU / RAM, and estimate FPS.
+    </div>
+
+  </div>
+
+  <!-- Custom PC Builder input and response box -->
+  <div style="
+    background-color:#1a1a1d;
+    border:1px solid #2a2a2f;
+    border-radius:16px;
+    max-width:480px;
+    width:100%;
+    margin:2rem auto 0;
+    padding:1rem 1rem 1.5rem;
+    box-shadow:0 24px 64px rgba(0,0,0,0.8);
+    text-align:left;
+    color:#fff;
+    ">
+    
+    <div style="font-size:0.8rem; color:#9ca3af; margin-bottom:0.5rem;">
+      Ask for a build:
+    </div>
+
+    <textarea
+      id="userInput"
+      style="
+        width:100%;
+        background-color:#0f0f10;
+        color:#fff;
+        border:1px solid #2a2a2f;
+        border-radius:8px;
+        padding:0.75rem;
+        font-size:0.9rem;
+        line-height:1.3rem;
+        resize:none;
+        height:70px;
+        "
+      placeholder="Example: I have $1500 for Cyberpunk 2077 at 1440p High. Build me a PC with FPS and total price.">
+    </textarea>
+
+    <button
+      id="sendBtn"
+      style="
+        margin-top:0.75rem;
+        width:100%;
+        background:linear-gradient(90deg,#3b82f6,#8b5cf6);
+        border:none;
+        border-radius:8px;
+        color:#fff;
+        font-weight:600;
+        font-size:0.9rem;
+        padding:0.75rem;
+        cursor:pointer;
+      "
+    >
+      Get My Build
+    </button>
+
+    <div id="answerBox"
+      style="
+        margin-top:1rem;
+        background-color:#0f0f10;
+        border:1px solid #2a2a2f;
+        border-radius:8px;
+        padding:0.75rem;
+        font-size:0.8rem;
+        line-height:1.3rem;
+        color:#d1d5db;
+        white-space:pre-wrap;
+        min-height:4rem;
+      "
+    >Your build answer will show up here...</div>
+  </div>
+
+  <script>
+    async function askForBuild() {
+      const msg = document.getElementById('userInput').value.trim();
+      if (!msg) return;
+
+      // show loading state
+      const answerBox = document.getElementById('answerBox');
+      answerBox.textContent = "Working on it... (fetching game requirements, prices, FPS)";
+
+      try {
+        const res = await fetch("http://127.0.0.1:8000/ask", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ message: msg })
+        });
+
+        const data = await res.json();
+        if (data.answer) {
+          answerBox.textContent = data.answer;
+        } else if (data.error) {
+          answerBox.textContent = "Error: " + data.error;
+        } else {
+          answerBox.textContent = "Unexpected response.";
+        }
+      } catch (err) {
+        answerBox.textContent = "Request failed. Is the server.py (uvicorn) running?";
+      }
+    }
+
+    document.getElementById('sendBtn').addEventListener('click', askForBuild);
+  </script>
+</body>
+</html>
+
