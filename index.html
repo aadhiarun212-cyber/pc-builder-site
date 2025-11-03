@@ -264,12 +264,11 @@ ${extras ? "Preferences: " + extras : ""}`;
     }
 
     async function askBackend(message) {
-      const url = API_BASE + "/ask";
-      const resp = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message })
-      });
+const res = await fetch(API_BASE + "/ask", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ message: msg })
+});
 
       if (!resp.ok) {
         const fallback = await resp.text().catch(() => "");
