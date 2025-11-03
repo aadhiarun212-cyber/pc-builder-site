@@ -239,7 +239,49 @@
 
 <script>
   // 1) Point to your Render API (no trailing slash)
-  const API_BASE = "https://pc-builder-site.onrender.com";  // <-- your real URL
+  const API_BASE = "https://pc-builder-site.onrender.com";  // <-- your real URlL
+<script>
+  /* keep your existing const API_BASE line above this */
+
+  // --- Budget guardrails (frontend) ---
+  const MIN_BUDGET_FOR_SETTING = {
+    "1080p Low": 500,
+    "1080p Medium": 800,
+    "1080p High": 1000,
+    "1440p High": 1500,
+    "1440p Ultra": 1800,
+    "4K High": 2200,
+    "4K Ultra": 3000,
+  };
+
+  // Parse budget labels like "$1,000–$1,500" or "$3,000+"
+  function parseBudgetRange(label) {
+    const plus = /\$([\d,]+)\+\s*/i.exec(label);
+    if (plus) return { min: Number(plus[1].replace(/,/g, "")), max: Infinity };
+    const m = /\$([\d,]+)\s*–\s*\$([\d,]+)/i.exec(label);
+    if (!m) return { min: 0, max: 0 };
+    return { min: Number(m[1].replace(/,/g, "")), max: Number(m[2].replace(/,/g, "")) };
+  }
+
+  // Normalize choice; either bumps the budget or leaves as-is
+  function normalizeChoice(setting, budgetLabel) {
+    const { min } = parseBudgetRange(budgetLabel);
+    const required = MIN_BUDGET_FOR_SETTING[setting] ?? 0;
+
+    if (min < required) {
+      const BRACKETS = [
+        "$500–$1,000",
+        "$1,000–$1,500",
+        "$1,500–$2,000",
+        "$2,000–$3,000",
+        "$3,000+",
+      ];
+      const pick = BRACKETS.find(b => parseBudgetRange(b).min >= required) || "$3,000+";
+      return { setting, budgetLabel: pick, note: `We raised the budget to meet "${setting}" (min ~$${required.toLocaleString()}).` };
+    }
+    return { setting, budgetLabel, note: "" };
+  }
+
 
   // Grab elements
   const gameEl = document.getElementById('game');
@@ -280,21 +322,47 @@ ${extras ? "Preferences: " + extras : ""}`;
     const data = await resp.json();
     return data.answer || JSON.stringify(data);
   }
+  function makePromptWithInputs({ game, setting, budgetLabel, extras }) {
+    return `Build me a gaming PC for ${game} at ${setting}.
+Budget: ${budgetLabel}.
+Classify budget rules: 500–1000 = Low, 1000–2000 = Medium, 1800–3000 = High, 3300+ = 4K.
+Return a neat list with: CPU, GPU, RAM (GB), Storage, PSU, Case, Est FPS for that game/setting, and Total price in USD.
+${extras ? "Preferences: " + extras : ""}`;
+  }
 
   // Button handler
   async function onGenerate() {
-    const msg = makePrompt();          // <-- define msg
+    // read UI
+    let setting = settingEl.value;
+    let budgetLabel = budgetEl.value;
+
+    // normalize
+    const norm = normalizeChoice(setting, budgetLabel);
+    setting = norm.setting;
+    budgetLabel = norm.budgetLabel;
+
+    // show note if we auto-corrected
+    statusEl.textContent = norm.note || "Working…";
+
+    const prompt = makePromptWithInputs({
+      game: gameEl.value,
+      setting,
+      budgetLabel,
+      extras: extrasEl.value
+    });
+
     outEl.textContent = "";
-    statusEl.textContent = "Working…";
     goBtn.disabled = true;
 
     try {
-      const answer = await askBackend(msg);
-      outEl.textContent = answer;
-      statusEl.textContent = "Done";
-    } catch (e) {
+      const answer = await askBackend(prompt);
+      // linkify for PCPP searches (function added below)
+      outEl.innerHTML = linkifyParts(answer).replace(/\n/g, "<br>");
+      statusEl.textContent = norm.note ? `${norm.note} Done.` : "Done";
+    } catch (err) {
+      outEl.textContent = "";
       statusEl.textContent = "Error";
-      alert(e.message);
+      alert(err.message);
     } finally {
       goBtn.disabled = false;
     }
@@ -308,6 +376,20 @@ ${extras ? "Preferences: " + extras : ""}`;
 
   goBtn.addEventListener('click', onGenerate);
   clearBtn.addEventListener('click', onClear);
+  // Turn lines like "CPU: Ryzen 5 5600" into PCPP search links
+  function linkifyParts(text) {
+    const LINES = text.split(/\r?\n/);
+    const KEYS = ["CPU", "GPU", "RAM", "Memory", "Storage", "PSU", "Power Supply", "Case", "Motherboard", "Cooler"];
+    return LINES.map(line => {
+      const m = /^(\s*)([A-Za-z ]{2,20}):\s*(.+)$/.exec(line);
+      if (!m) return line;
+      const [, indent, key, value] = m;
+      if (!KEYS.includes(key.trim())) return line;
+      const q = encodeURIComponent(value.replace(/\*|\[.*?\]|\(.*?\)/g,"").trim());
+      const href = `https://pcpartpicker.com/search/?q=${q}`;
+      return `${indent}${key}: <a href="${href}" target="_blank" rel="noopener noreferrer">${value}</a>`;
+    }).join("\n");
+  }
 </script>
 </body>
 </html>
