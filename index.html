@@ -237,75 +237,78 @@
     <p class="hint">Tip: You can also ask freeform — “I have $1500 for Cyberpunk at 1440p High. Give me CPU/GPU/RAM/PSU/Case, est FPS, and total price.”</p>
   </div>
 
-  <script>
-    // ⛳️ Replace with your actual Render API base URL (no trailing slash)
-    const API_BASE = "https://pc-builder-site.onrender.com/ask";
+<script>
+  // 1) Point to your Render API (no trailing slash)
+  const API_BASE = "https://pc-builder-site.onrender.com";  // <-- your real URL
 
-    const gameEl = document.getElementById('game');
-    const settingEl = document.getElementById('setting');
-    const budgetEl = document.getElementById('budget');
-    const extrasEl = document.getElementById('extras');
-    const goBtn = document.getElementById('goBtn');
-    const clearBtn = document.getElementById('clearBtn');
-    const outEl = document.getElementById('result');
-    const statusEl = document.getElementById('status');
+  // Grab elements
+  const gameEl = document.getElementById('game');
+  const settingEl = document.getElementById('setting');
+  const budgetEl = document.getElementById('budget');
+  const extrasEl = document.getElementById('extras');
+  const goBtn = document.getElementById('goBtn');
+  const clearBtn = document.getElementById('clearBtn');
+  const outEl = document.getElementById('result');
+  const statusEl = document.getElementById('status');
 
-    function makePrompt() {
-      const game = gameEl.value;
-      const setting = settingEl.value;
-      const budget = budgetEl.value;
-      const extras = (extrasEl.value || '').trim();
+  // Build the prompt string (never empty)
+  function makePrompt() {
+    const game = gameEl?.value || "Cyberpunk 2077";
+    const setting = settingEl?.value || "1440p High";
+    const budget = budgetEl?.value || "$1,000–$1,500";
+    const extras = (extrasEl?.value || '').trim();
 
-      return `Build me a gaming PC for ${game} at ${setting}.
+    return `Build me a gaming PC for ${game} at ${setting}.
 Budget: ${budget}.
 Classify budget rules: 500–1000 = Low, 1000–2000 = Medium, 1800–3000 = High, 3300+ = 4K.
 Return a neat list with: CPU, GPU, RAM (GB), Storage, PSU, Case, Est FPS for that game/setting, and Total price in USD.
 ${extras ? "Preferences: " + extras : ""}`;
+  }
+
+  // POST to /ask with the required JSON shape
+  async function askBackend(promptText) {
+    const resp = await fetch(`${API_BASE}/ask`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: promptText })    // <-- FastAPI expects {message: "..."}
+    });
+
+    if (!resp.ok) {
+      const text = await resp.text().catch(() => "");
+      throw new Error(`Request failed (${resp.status}). ${text}`);
     }
+    const data = await resp.json();
+    return data.answer || JSON.stringify(data);
+  }
 
-    async function askBackend(message) {
-const res = await fetch(API_BASE + "/ask", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ message: msg })
-});
+  // Button handler
+  async function onGenerate() {
+    const msg = makePrompt();          // <-- define msg
+    outEl.textContent = "";
+    statusEl.textContent = "Working…";
+    goBtn.disabled = true;
 
-      if (!resp.ok) {
-        const fallback = await resp.text().catch(() => "");
-        throw new Error(`Request failed (${resp.status}). ${fallback}`);
-      }
-      const data = await resp.json();
-      return (data && (data.answer || data.result || JSON.stringify(data)));
+    try {
+      const answer = await askBackend(msg);
+      outEl.textContent = answer;
+      statusEl.textContent = "Done";
+    } catch (e) {
+      statusEl.textContent = "Error";
+      alert(e.message);
+    } finally {
+      goBtn.disabled = false;
     }
+  }
 
-    async function onGenerate() {
-      const prompt = makePrompt();
-      outEl.textContent = "";
-      statusEl.textContent = "Working…";
-      goBtn.disabled = true;
+  function onClear() {
+    extrasEl.value = "";
+    outEl.textContent = "Your build will appear here.";
+    statusEl.textContent = "Idle";
+  }
 
-      try {
-        const answer = await askBackend(prompt);
-        outEl.textContent = answer;
-        statusEl.textContent = "Done";
-      } catch (err) {
-        outEl.textContent = "";
-        statusEl.textContent = "Error";
-        alert(err.message);
-      } finally {
-        goBtn.disabled = false;
-      }
-    }
-
-    function onClear() {
-      extrasEl.value = "";
-      outEl.textContent = "Your build will appear here.";
-      statusEl.textContent = "Idle";
-    }
-
-    goBtn.addEventListener('click', onGenerate);
-    clearBtn.addEventListener('click', onClear);
-  </script>
+  goBtn.addEventListener('click', onGenerate);
+  clearBtn.addEventListener('click', onClear);
+</script>
 </body>
 </html>
 
