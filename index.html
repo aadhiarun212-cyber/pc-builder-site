@@ -226,13 +226,12 @@
       answerBox.textContent = "Working on it... (fetching game requirements, prices, FPS)";
 
       try {
-        const res = await fetch("http://127.0.0.1:8000/ask", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ message: msg })
-        });
+        const res = await fetch("https://pc-builder-api.onrender.com/ask", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ message: message }),
+})
+
 
         const data = await res.json();
         if (data.answer) {
